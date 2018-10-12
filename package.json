@@ -1,6 +1,6 @@
 {
   "name": "copybox",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "A react component to handle copying and pasting data",
   "main": "src/index.js",
   "scripts": {
