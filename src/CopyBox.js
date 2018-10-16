@@ -40,7 +40,8 @@ export default class CopyBox extends PureComponent{
       animationPause: 500,
       copyPaste: copyPasteHandler,
       title: "Click here and copy or paste to duplicate settings",
-      content: ""
+      content: "",
+      placeholder: "\uf24d"
    }
 
    static propTypes = {
@@ -59,7 +60,8 @@ export default class CopyBox extends PureComponent{
          copy: PropTypes.func.isRequired,
          paste: PropTypes.func.isRequired
       }),
-      className: PropTypes.string
+      className: PropTypes.string,
+      placeholder: PropTypes.string
    }
 
    constructor(props){
@@ -114,7 +116,8 @@ export default class CopyBox extends PureComponent{
       let {
          children,
          title,
-         className
+         className,
+         placeholder
       } = this.props;
       let {
          copying,
@@ -132,8 +135,9 @@ export default class CopyBox extends PureComponent{
                title={title}
                onPaste={this.onPaste}
                onCopy={this.copyContent}
-               placeholder={'\uf24d'}
+               placeholder={placeholder}
             />
+            {children}
          </div>
       );
    }

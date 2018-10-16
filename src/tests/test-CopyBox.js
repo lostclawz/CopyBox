@@ -4,8 +4,6 @@ import {shallow} from 'enzyme';
 import sinon from 'sinon';
 import CopyBox from '../CopyBox';
 
-// ms buffer when we test timing
-const MS_ALLOWANCE = 5;
 
 describe('<CopyBox/>', function(){
    var wrapper;
@@ -22,7 +20,8 @@ describe('<CopyBox/>', function(){
          test: "data"
       },
       title: "copy and paste here",
-      className: "test-class"
+      className: "test-class",
+      placeholder: "test"
    }
    var onPaste;
    var copier, paster;
@@ -36,15 +35,18 @@ describe('<CopyBox/>', function(){
 			<CopyBox
             {...testProps}
             onPaste={onPaste}
-			/>
+			>
+            <div className="test-child">Test</div>
+         </CopyBox>
       );
       input = wrapper.find('.copy-box input');
-      
+      this.clock = sinon.useFakeTimers();
    })
 
    afterEach(function(){
       copier.restore();
       paster.restore();
+      this.clock.restore();
    })
    
    it(`renders one div.copy-box`, () => {
@@ -59,30 +61,39 @@ describe('<CopyBox/>', function(){
    })
    it(`renders an input inside .copy-box`, () => {
       expect(input).to.have.lengthOf(1);
-      expect(input.props().readOnly).to.be.true;
-      expect(input.props().placeholder).to.equal('\uf24d');
    })
    it(`renders the input as readOnly`, () => {
       expect(
          input.prop('readOnly')
       ).to.be.true;
    })
-   it(`renders the input as readOnly and with a title property of props.title`, () => {
+   it(`renders an input with placeholder props.placeholder`, () => {
       expect(
-         input.props().title
+         input.prop('placeholder')
+      ).to.equal(testProps.placeholder);
+   })
+   it(`renders the input with a title property of props.title`, () => {
+      expect(
+         input.prop('title')
       ).to.equal(testProps.title)
    })
-   it(`gives .copy-box .copying class after cmd+c, and removes it after props.animationPause ms`, (done) => {
+   it(`renders any children next to the input component`, () => {
+      expect(wrapper.children()).to.have.lengthOf(2);
+      expect(
+         wrapper.childAt(0).is('input')
+      ).to.be.true;
+      expect(
+         wrapper.childAt(1).is('.test-child')
+      ).to.be.true;
+   })
+   it(`gives .copy-box .copying class after cmd+c, and removes it after props.animationPause ms`, function() {
       expect(input).to.have.lengthOf(1);
       input.simulate('copy');
-      expect(wrapper.find('.copy-box.copying')).to.have.lengthOf(1);
-      setTimeout(() => {
-         expect(wrapper.find('.copy-box.copying')).to.have.lengthOf(1);
-         setTimeout(() => {
-            expect(wrapper.find('.copy-box.copying')).to.have.lengthOf(0);
-            done();
-         }, MS_ALLOWANCE * 2)
-      }, testProps.animationPause - MS_ALLOWANCE)
+      expect(wrapper.exists('.copy-box.copying')).to.be.true;
+      this.clock.tick(testProps.animationPause - 1);
+      expect(wrapper.exists('.copy-box.copying')).to.be.true;
+      this.clock.tick(1);
+      expect(wrapper.exists('.copy-box.copying')).to.be.false;
    })
    it(`passes the content and props.storageKey to copyPaste.copy on copy`, () => {
       expect(input).to.have.lengthOf(1);
@@ -103,18 +114,15 @@ describe('<CopyBox/>', function(){
          onPaste.calledWith(testProps.content)
       ).to.be.true;
    });
-   it(`gives .copy-box .pasting class after cmd+v, and removes it after props.animationPause ms`, (done) => {
+   it(`gives .copy-box .pasting class after cmd+v, and removes it after props.animationPause ms`, function(){
       expect(input).to.have.lengthOf(1);
       const e = {preventDefault: sinon.spy()};
       input.simulate('paste', e);
       expect(wrapper.find('.copy-box.pasting')).to.have.lengthOf(1);
-      setTimeout(() => {
-         expect(wrapper.find('.copy-box.pasting')).to.have.lengthOf(1);
-         setTimeout(() => {
-            expect(wrapper.find('.copy-box.pasting')).to.have.lengthOf(0);
-            done();
-         }, MS_ALLOWANCE * 2)
-      }, testProps.animationPause - MS_ALLOWANCE)
+      this.clock.tick(testProps.animationPause - 1);
+      expect(wrapper.find('.copy-box.pasting')).to.have.lengthOf(1);
+      this.clock.tick(2);
+      expect(wrapper.find('.copy-box.pasting')).to.have.lengthOf(0);
    })
 
 })
