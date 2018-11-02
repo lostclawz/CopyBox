@@ -23,8 +23,8 @@
   "homepage": "https://github.com/lostclawz/copybox#readme",
   "dependencies": {
     "classnames": "^2.2.6",
-    "react": "^16.5.2",
-    "react-dom": "^16.5.2"
+    "react": "^16.6.0",
+    "react-dom": "^16.6.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.1.2",
@@ -38,10 +38,10 @@
     "chai": "^4.2.0",
     "enzyme": "^3.7.0",
     "enzyme-adapter-react-16": "^1.6.0",
-    "eslint": "^5.6.1",
+    "eslint": "^5.8.0",
     "mocha": "^5.2.0",
     "prop-types": "^15.6.2",
-    "sinon": "^7.0.0"
+    "sinon": "^7.1.1"
   },
   "babel": {
     "presets": [
