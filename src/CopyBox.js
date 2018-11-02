@@ -26,7 +26,7 @@ export const copyPasteHandler = {
          document.body.removeChild(el);
       }
    },
-   paste: (storageKey) => {
+   paste: (storageKey, evt) => {
       return window.localStorage
          ? localStorage.getItem(storageKey)
          : evt.clipboardData.getData('Text');
@@ -106,7 +106,7 @@ export default class CopyBox extends PureComponent{
 
       let pasteText = paste(storageKey);
       if (typeof onPaste === 'function'){
-         onPaste(pasteText);
+         onPaste(pasteText, evt);
          this.flashState('pasting');
       }
       evt.preventDefault();
