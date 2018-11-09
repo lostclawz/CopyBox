@@ -23,21 +23,21 @@
   "homepage": "https://github.com/lostclawz/copybox#readme",
   "dependencies": {
     "classnames": "^2.2.6",
-    "react": "^16.6.0",
-    "react-dom": "^16.6.0"
+    "react": "^16.6.1",
+    "react-dom": "^16.6.1"
   },
   "devDependencies": {
-    "@babel/cli": "^7.1.2",
-    "@babel/core": "^7.1.2",
+    "@babel/cli": "^7.1.5",
+    "@babel/core": "^7.1.5",
     "@babel/plugin-proposal-class-properties": "^7.1.0",
     "@babel/plugin-proposal-object-rest-spread": "^7.0.0",
     "@babel/plugin-transform-destructuring": "^7.1.3",
-    "@babel/preset-env": "^7.1.0",
+    "@babel/preset-env": "^7.1.5",
     "@babel/preset-react": "^7.0.0",
     "@babel/register": "^7.0.0",
     "chai": "^4.2.0",
     "enzyme": "^3.7.0",
-    "enzyme-adapter-react-16": "^1.6.0",
+    "enzyme-adapter-react-16": "^1.7.0",
     "eslint": "^5.8.0",
     "mocha": "^5.2.0",
     "prop-types": "^15.6.2",
