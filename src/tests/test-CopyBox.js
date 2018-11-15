@@ -21,7 +21,8 @@ describe('<CopyBox/>', function(){
       },
       title: "copy and paste here",
       className: "test-class",
-      placeholder: "test"
+      placeholder: "test",
+      useClipboard: true
    }
    var onPaste;
    var copier, paster;
@@ -114,6 +115,23 @@ describe('<CopyBox/>', function(){
          onPaste.calledWith(testProps.content)
       ).to.be.true;
    });
+   it(`passes the useClipboard prop to the copy and paste functions if provided`, () => {
+      expect(input).to.have.lengthOf(1);
+      input.simulate('copy');
+      expect(
+         copier.calledWith(testProps.content, testProps.storageKey, true)
+      ).to.be.true;
+      expect(data[testProps.storageKey]).to.equal(testProps.content);
+      const e = {preventDefault: sinon.spy()};
+      input.simulate('paste', e);
+      expect(e.preventDefault.calledOnce).to.be.true;
+      expect(
+         paster.calledWith(testProps.storageKey)
+      ).to.be.true;
+      expect(
+         onPaste.calledWith(testProps.content, e, true)
+      ).to.be.true;
+   })
    it(`gives .copy-box .pasting class after cmd+v, and removes it after props.animationPause ms`, function(){
       expect(input).to.have.lengthOf(1);
       const e = {preventDefault: sinon.spy()};
