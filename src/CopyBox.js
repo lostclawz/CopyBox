@@ -9,8 +9,8 @@ import classNames from 'classnames';
  * is copied and pasted
  */
 export const copyPasteHandler = {
-   copy: (data, storageKey) => {
-      if (window.localStorage){
+   copy: (data, storageKey, useClipboard=false) => {
+      if (window.localStorage && !useClipboard){
          // use localStorage
          localStorage.setItem(storageKey, data);
       }
@@ -26,8 +26,8 @@ export const copyPasteHandler = {
          document.body.removeChild(el);
       }
    },
-   paste: (storageKey, evt) => {
-      return window.localStorage
+   paste: (storageKey, evt, useClipboard=false) => {
+      return window.localStorage && !useClipboard
          ? localStorage.getItem(storageKey)
          : evt.clipboardData.getData('Text');
    }
@@ -41,7 +41,8 @@ export default class CopyBox extends PureComponent{
       copyPaste: copyPasteHandler,
       title: "Click here and copy or paste to duplicate settings",
       content: "",
-      placeholder: "\uf24d"
+      placeholder: "\uf24d",
+      useClipboard: false
    }
 
    static propTypes = {
@@ -61,7 +62,8 @@ export default class CopyBox extends PureComponent{
          paste: PropTypes.func.isRequired
       }),
       className: PropTypes.string,
-      placeholder: PropTypes.string
+      placeholder: PropTypes.string,
+      useClipboard: PropTypes.bool
    }
 
    constructor(props){
@@ -89,10 +91,11 @@ export default class CopyBox extends PureComponent{
       let {
          content,
          storageKey,
+         useClipboard,
          copyPaste: {copy}
       } = this.props;
       if (content){
-         copy(content, storageKey);
+         copy(content, storageKey, useClipboard);
          this.flashState('copying');
       }
    }
@@ -101,12 +104,13 @@ export default class CopyBox extends PureComponent{
       let {
          onPaste,
          storageKey,
+         useClipboard,
          copyPaste: {paste}
       } = this.props;
 
       let pasteText = paste(storageKey);
       if (typeof onPaste === 'function'){
-         onPaste(pasteText, evt);
+         onPaste(pasteText, evt, useClipboard);
          this.flashState('pasting');
       }
       evt.preventDefault();
