@@ -149,8 +149,7 @@ describe('<CopyBox/>', function(){
       ).to.be.true;
       expect(data[testProps.storageKey]).to.equal(testProps.content);
       const e = {
-         shiftKey: true,
-         // preventDefault: sinon.spy()
+         shiftKey: true
       };
       input.simulate('paste', e);
       expect(paster.calledWith(

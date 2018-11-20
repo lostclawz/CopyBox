@@ -104,6 +104,9 @@ export default class CopyBox extends PureComponent{
          );
          this.flashState('copying');
       }
+      if (typeof evt.preventDefault === 'function'){
+         evt.preventDefault();
+      }
    }
 
    onPaste = (evt) => {
