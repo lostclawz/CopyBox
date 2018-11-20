@@ -159,5 +159,10 @@ describe('<CopyBox/>', function(){
          true
       )).to.be.true;
    })
+   it(`stops click event propagation from .copy-box wrapper`, () => {
+      const e = {stopPropagation: sinon.spy()};
+      wrapper.find('.copy-box').simulate('click', e);
+      expect(e.stopPropagation.calledOnce).to.be.true;
+   })
 
 })

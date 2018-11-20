@@ -127,6 +127,8 @@ export default class CopyBox extends PureComponent{
       }
    }
 
+   stopPropagation = e => e.stopPropagation()
+
    render(){
       let {
          children,
@@ -140,11 +142,14 @@ export default class CopyBox extends PureComponent{
       } = this.state;
 
       return (
-         <div className={classNames(
-            'copy-box',
-            className,
-            {copying, pasting}
-         )}>
+         <div
+            className={classNames(
+               'copy-box',
+               className,
+               {copying, pasting}
+            )}
+            onClick={this.stopPropagation}
+         >
             <input
                readOnly
                title={title}
