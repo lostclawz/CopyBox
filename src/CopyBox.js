@@ -42,7 +42,8 @@ export default class CopyBox extends PureComponent{
       title: "Click here and copy or paste to duplicate settings",
       content: "",
       placeholder: "\uf24d",
-      useClipboard: false
+      useClipboard: false,
+      clipboardWithShift: true
    }
 
    static propTypes = {
@@ -63,7 +64,8 @@ export default class CopyBox extends PureComponent{
       }),
       className: PropTypes.string,
       placeholder: PropTypes.string,
-      useClipboard: PropTypes.bool
+      useClipboard: PropTypes.bool,
+      clipboardWithShift: PropTypes.bool
    }
 
    constructor(props){
@@ -87,7 +89,7 @@ export default class CopyBox extends PureComponent{
       })
    }
 
-   copyContent = () => {
+   copyContent = (evt) => {
       let {
          content,
          storageKey,
@@ -95,7 +97,11 @@ export default class CopyBox extends PureComponent{
          copyPaste: {copy}
       } = this.props;
       if (content){
-         copy(content, storageKey, useClipboard);
+         copy(
+            content,
+            storageKey,
+            evt && evt.shiftKey || useClipboard
+         );
          this.flashState('copying');
       }
    }
@@ -107,13 +113,18 @@ export default class CopyBox extends PureComponent{
          useClipboard,
          copyPaste: {paste}
       } = this.props;
-
-      let pasteText = paste(storageKey);
+      let pasteText = paste(
+         storageKey,
+         evt,
+         evt && evt.shiftKey || useClipboard
+      );
       if (typeof onPaste === 'function'){
-         onPaste(pasteText, evt, useClipboard);
+         onPaste(pasteText, evt);
          this.flashState('pasting');
       }
-      evt.preventDefault();
+      if (typeof evt.preventDefault === 'function'){
+         evt.preventDefault();
+      }
    }
 
    render(){

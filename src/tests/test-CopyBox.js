@@ -45,9 +45,8 @@ describe('<CopyBox/>', function(){
    })
 
    afterEach(function(){
-      copier.restore();
-      paster.restore();
-      this.clock.restore();
+      sinon.restore();
+      // this.clock.restore();
    })
    
    it(`renders one div.copy-box`, () => {
@@ -89,7 +88,7 @@ describe('<CopyBox/>', function(){
    })
    it(`gives .copy-box .copying class after cmd+c, and removes it after props.animationPause ms`, function() {
       expect(input).to.have.lengthOf(1);
-      input.simulate('copy');
+      input.simulate('copy', {e: {shiftKey: false}});
       expect(wrapper.exists('.copy-box.copying')).to.be.true;
       this.clock.tick(testProps.animationPause - 1);
       expect(wrapper.exists('.copy-box.copying')).to.be.true;
@@ -98,7 +97,7 @@ describe('<CopyBox/>', function(){
    })
    it(`passes the content and props.storageKey to copyPaste.copy on copy`, () => {
       expect(input).to.have.lengthOf(1);
-      input.simulate('copy');
+      input.simulate('copy', {e: {shiftKey: false}});
       expect(
          copier.calledWith(testProps.content, testProps.storageKey)
       ).to.be.true;
@@ -117,7 +116,7 @@ describe('<CopyBox/>', function(){
    });
    it(`passes the useClipboard prop to the copy and paste functions if provided`, () => {
       expect(input).to.have.lengthOf(1);
-      input.simulate('copy');
+      input.simulate('copy', {shiftKey: false});
       expect(
          copier.calledWith(testProps.content, testProps.storageKey, true)
       ).to.be.true;
@@ -129,7 +128,7 @@ describe('<CopyBox/>', function(){
          paster.calledWith(testProps.storageKey)
       ).to.be.true;
       expect(
-         onPaste.calledWith(testProps.content, e, true)
+         onPaste.calledWith(testProps.content, e)
       ).to.be.true;
    })
    it(`gives .copy-box .pasting class after cmd+v, and removes it after props.animationPause ms`, function(){
@@ -141,6 +140,24 @@ describe('<CopyBox/>', function(){
       expect(wrapper.find('.copy-box.pasting')).to.have.lengthOf(1);
       this.clock.tick(2);
       expect(wrapper.find('.copy-box.pasting')).to.have.lengthOf(0);
+   })
+   it(`passes true for useClipboard if shift is help while copying or pasting`, () => {
+      expect(input).to.have.lengthOf(1);
+      input.simulate('copy', {shiftKey: true});
+      expect(
+         copier.calledWith(testProps.content, testProps.storageKey, true)
+      ).to.be.true;
+      expect(data[testProps.storageKey]).to.equal(testProps.content);
+      const e = {
+         shiftKey: true,
+         // preventDefault: sinon.spy()
+      };
+      input.simulate('paste', e);
+      expect(paster.calledWith(
+         testProps.storageKey,
+         e,
+         true
+      )).to.be.true;
    })
 
 })
