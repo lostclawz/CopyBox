@@ -22,7 +22,8 @@ describe('<CopyBox/>', function(){
       title: "copy and paste here",
       className: "test-class",
       placeholder: "test",
-      useClipboard: true
+      useClipboard: true,
+      'data-test': 'test'
    }
    var onPaste;
    var copier, paster;
@@ -163,5 +164,9 @@ describe('<CopyBox/>', function(){
       wrapper.find('.copy-box').simulate('click', e);
       expect(e.stopPropagation.calledOnce).to.be.true;
    })
-
+   it(`passes extra props to the div wrapper element`, () => {
+      expect(
+         wrapper.find('div.copy-box').prop('data-test')
+      ).to.equal('test')
+   })
 })
