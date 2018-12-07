@@ -137,7 +137,14 @@ export default class CopyBox extends PureComponent{
          children,
          title,
          className,
-         placeholder
+         placeholder,
+         copyPaste,
+         storageKey,
+         animationPause,
+         content,
+         useClipboard,
+         clipboardWithShift,
+         ...attrs
       } = this.props;
       let {
          copying,
@@ -152,6 +159,7 @@ export default class CopyBox extends PureComponent{
                {copying, pasting}
             )}
             onClick={this.stopPropagation}
+            {...attrs}
          >
             <input
                readOnly
