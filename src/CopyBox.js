@@ -141,6 +141,7 @@ export default class CopyBox extends PureComponent{
          copyPaste,
          storageKey,
          animationPause,
+         onPaste,
          content,
          useClipboard,
          clipboardWithShift,
